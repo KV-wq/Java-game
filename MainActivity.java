@@ -2,6 +2,7 @@ package com.example.kostya_igra;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -11,15 +12,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import org.json.JSONArray;
 
 import java.util.Arrays;
-
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 class Section{
     String question;
     String[] answers = new String[4];
-    Number correct;
+    Integer correct;
 }
-
-
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,11 +36,6 @@ public class MainActivity extends AppCompatActivity {
     Section section8 = new Section();
     Section section9 = new Section();
     Section section10 = new Section();
-
-
-
-
-
 
     public void arrayFilling(){
         section1.question = "Какой газ является основным компонентом атмосферы Земли?";
@@ -58,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         section2.correct = 2;
         sections[1] = section2;
 
-        section3.question = "Какое из перечисленных животных является национальным символом Австралии?";
+        section3.question = "Какое животное является национальным символом Австралии?";
         section3.answers[0] = "Кенгуру";
         section3.answers[1] = "Коала";
         section3.answers[2] = "Вомбат";
@@ -122,37 +118,98 @@ public class MainActivity extends AppCompatActivity {
         section10.correct = 0;
         sections[9] = section10;
 
-
-
     }
+
     int roundNumber = 1;
     int scoreNumber = 0;
 
-
     @SuppressLint("SetTextI18n")
-    public void handleClickToAnswer(View view){
-        if(scoreNumber == 0){
-            scoreNumber=500;
-        }else{
-            scoreNumber=scoreNumber*3+500;
-        }
+    public void handleClickToAnswer(View view) throws InterruptedException {
+
+
         if(roundNumber==10){
             question.setText("You WINNER!"+ " "+ " " + " " + " " + " "+ " " + " " + " "+ " "+ " " + " " + " "+ " "+ " " + " " + " "+ "Your score: " + scoreNumber);
+            a.setText("Chempion!!!");
+            b.setText("Chempion!!!");
+            c.setText("Chempion!!!");
+            d.setText("Chempion!!!");
+
+            a.setBackgroundColor(0xFF00FF00);
+            b.setBackgroundColor(0xFF00FF00);
+            c.setBackgroundColor(0xFF00FF00);
+            d.setBackgroundColor(0xFF00FF00);
             return;
         }
-        question.setText(sections[roundNumber].question);
-        a.setText(sections[roundNumber].answers[0]);
-        b.setText(sections[roundNumber].answers[1]);
-        c.setText(sections[roundNumber].answers[2]);
-        d.setText(sections[roundNumber].answers[3]);
-        score.setText("Score: " + scoreNumber);
-        round.setText("Round: " + (roundNumber + 1));
 
-        roundNumber++;
+            int correct = sections[roundNumber].correct;
+            Button clicked_but = (Button)view;
+
+
+            String clicked_text = (String) clicked_but.getText();
+            int clicked_index = -1;
+
+
+
+
+            for (int i = 0; i < sections[roundNumber].answers.length; i++) {
+
+
+                if (sections[roundNumber-1].answers[i].equals(clicked_text)) {
+                    clicked_index = i;
+                    break;
+                }
+            }
+
+
+            if(clicked_index != correct){
+                question.setText("YOU LOSE"+ " "+ " " + " " + " " + " "+ " " + " " + " "+ " "+ " " + " " + " " +" " + " " + " "+ " "+ " " + " " + " "+" " + " " + " "+ " "+ " " + " " + " "+ "Your score: " + scoreNumber);
+                a.setText("LOSER!!!");
+                b.setText("LOSER!!!");
+                c.setText("LOSER!!!");
+                d.setText("LOSER!!!");
+                a.setBackgroundColor(0xFFFF0000);
+                b.setBackgroundColor(0xFFFF0000);
+                c.setBackgroundColor(0xFFFF0000);
+                d.setBackgroundColor(0xFFFF0000);
+                return;
+            }
+            if(scoreNumber == 0){
+                scoreNumber=500;
+            }else{
+                scoreNumber=scoreNumber*3+500;
+            }
+
+        Handler handler = new Handler();
+
+
+        a.setBackgroundColor(0xFFFF0000);
+        b.setBackgroundColor(0xFFFF0000);
+        c.setBackgroundColor(0xFFFF0000);
+        d.setBackgroundColor(0xFFFF0000);
+        clicked_but.setBackgroundColor(0xFF00FF00);
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+
+
+                a.setBackgroundColor(0xFFA900FF);
+                b.setBackgroundColor(0xFFA900FF);
+                c.setBackgroundColor(0xFFA900FF);
+                d.setBackgroundColor(0xFFA900FF);
+                question.setText(sections[roundNumber].question);
+                a.setText(sections[roundNumber].answers[0]);
+                b.setText(sections[roundNumber].answers[1]);
+                c.setText(sections[roundNumber].answers[2]);
+                d.setText(sections[roundNumber].answers[3]);
+                score.setText("Score: " + scoreNumber);
+                round.setText("Round: " + (roundNumber + 1));
+                roundNumber++;
+            }
+        }, 2000);
 
     }
-
-
 
     TextView round;
     TextView score;
@@ -188,8 +245,6 @@ public class MainActivity extends AppCompatActivity {
         button3 = findViewById(R.id.button3);
         button4 = findViewById(R.id.button4);
 
-
-
         arrayFilling();
 
         round.setText("Round: " + 1);
@@ -199,6 +254,12 @@ public class MainActivity extends AppCompatActivity {
         b.setText(sections[0].answers[1]);
         c.setText(sections[0].answers[2]);
         d.setText(sections[0].answers[3]);
+        a.setBackgroundColor(0xFFA900FF);
+        b.setBackgroundColor(0xFFA900FF);
+        c.setBackgroundColor(0xFFA900FF);
+        d.setBackgroundColor(0xFFA900FF);
+
+
 
 
     }
